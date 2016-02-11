@@ -46,12 +46,11 @@ namespace Gameloop.Vdf
             VObject result = new VObject();
 
             reader.ReadToken();
-            do
+            while (reader.CurrentState != VdfReaderState.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
             {
                 result.Add(ReadProperty(reader));
                 reader.ReadToken();
             }
-            while (reader.CurrentState != VdfReaderState.Object || reader.Value != VdfStructure.ObjectEnd.ToString());
 
             return result;
         }
