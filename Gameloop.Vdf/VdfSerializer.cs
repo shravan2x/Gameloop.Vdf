@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Gameloop.Vdf
+﻿namespace Gameloop.Vdf
 {
     public class VdfSerializer
     {
@@ -33,7 +31,7 @@ namespace Gameloop.Vdf
             result.Key = reader.Value;
 
             reader.ReadToken();
-            if (reader.CurrentState == VdfReaderState.Property)
+            if (reader.CurrentState == EVdfReaderState.Property)
                 result.Value = new VValue(reader.Value);
             else
                 result.Value = ReadObject(reader);
@@ -46,7 +44,7 @@ namespace Gameloop.Vdf
             VObject result = new VObject();
 
             reader.ReadToken();
-            while (reader.CurrentState != VdfReaderState.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
+            while (reader.CurrentState != EVdfReaderState.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
             {
                 result.Add(ReadProperty(reader));
                 reader.ReadToken();
