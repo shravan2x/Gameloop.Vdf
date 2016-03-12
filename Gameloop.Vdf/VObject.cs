@@ -47,8 +47,6 @@ namespace Gameloop.Vdf
 
         public void Add(string key, VToken value)
         {
-            if (ContainsKey(key))
-                throw new ArgumentException("An item with the same name already exists.");
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
@@ -59,8 +57,6 @@ namespace Gameloop.Vdf
         {
             if (property == null)
                 throw new ArgumentNullException(nameof(property));
-            if (ContainsKey(property.Key))
-                throw new ArgumentException("An item with the same name already exists.");
             if (property.Value == null)
                 throw new ArgumentNullException(nameof(property.Value));
 
