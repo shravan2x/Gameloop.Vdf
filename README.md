@@ -11,7 +11,7 @@ There are no releases yet.
 ## Documentation
 
 There is currently no documentation for the project. It will be added in a future release.<br>
-For now, just use `VdfConvert.DeserializeObject(string)`.
+For now, just use `VdfConvert.Deserialize(string)`.
 
 ## License
 

@@ -1,28 +1,23 @@
-﻿namespace Gameloop.Vdf
+﻿using System.IO;
+
+namespace Gameloop.Vdf
 {
     public class VdfSerializer
     {
-        public static VdfSerializer Create()
-        {
-            return new VdfSerializer(VdfSerializerSettings.Default);
-        }
-
-        public static VdfSerializer Create(VdfSerializerSettings settings)
-        {
-            return new VdfSerializer(settings);
-        }
-
-        private VdfSerializerSettings _settings;
+        private readonly VdfSerializerSettings _settings;
 
         public VdfSerializer(VdfSerializerSettings settings)
         {
             _settings = settings;
         }
 
-        public object Deserialize(VdfReader reader)
+        public VProperty Deserialize(TextReader textReader)
         {
-            reader.ReadToken();
-            return ReadProperty(reader);
+            using (VdfReader vdfReader = new VdfTextReader(textReader, _settings))
+            {
+                vdfReader.ReadToken();
+                return ReadProperty(vdfReader);
+            }
         }
 
         private VProperty ReadProperty(VdfReader reader)

@@ -26,7 +26,9 @@ namespace Gameloop.Vdf
         private int _charPos, _charsLen, _tokenSize;
         private bool _isQuoted;
 
-        public VdfTextReader(TextReader reader)
+        public VdfTextReader(TextReader reader) : this(reader, VdfSerializerSettings.Default) { }
+
+        public VdfTextReader(TextReader reader, VdfSerializerSettings settings) : base(settings)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));

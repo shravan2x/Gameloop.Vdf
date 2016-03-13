@@ -5,25 +5,27 @@ namespace Gameloop.Vdf
 {
     public static class VdfConvert
     {
-        public static object DeserializeObject(string value)
+        public static VProperty Deserialize(string value)
         {
-            return DeserializeObject(new StringReader(value), VdfSerializerSettings.Default);
+            return Deserialize(value, VdfSerializerSettings.Default);
         }
 
-        public static object DeserializeObject(TextReader reader)
+        public static VProperty Deserialize(string value, VdfSerializerSettings settings)
         {
-            return DeserializeObject(reader, VdfSerializerSettings.Default);
+            return Deserialize(new StringReader(value), settings);
         }
 
-        public static object DeserializeObject(TextReader reader, VdfSerializerSettings settings)
+        public static VProperty Deserialize(TextReader reader)
+        {
+            return Deserialize(reader, VdfSerializerSettings.Default);
+        }
+
+        public static VProperty Deserialize(TextReader reader, VdfSerializerSettings settings)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
-
-            VdfSerializer serializer = VdfSerializer.Create(settings);
-
-            using (VdfTextReader jsonTextReader = new VdfTextReader(reader))
-                return serializer.Deserialize(jsonTextReader);
+            
+            return (new VdfSerializer(settings)).Deserialize(reader);
         }
     }
 }

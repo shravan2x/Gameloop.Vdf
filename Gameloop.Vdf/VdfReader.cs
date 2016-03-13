@@ -11,13 +11,7 @@ namespace Gameloop.Vdf
         public bool CloseInput { get; set; }
         public string Value { get; set; }
 
-        protected VdfReader()
-        {
-            Settings = VdfSerializerSettings.Default;
-            CurrentState = EVdfReaderState.Start;
-            Value = null;
-            CloseInput = true;
-        }
+        protected VdfReader() : this(VdfSerializerSettings.Default) { }
 
         protected VdfReader(VdfSerializerSettings settings)
         {
