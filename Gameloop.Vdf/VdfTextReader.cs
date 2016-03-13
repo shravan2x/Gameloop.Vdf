@@ -139,13 +139,28 @@ namespace Gameloop.Vdf
                     _charPos++;
                     return true;
                 }
-                else
-                {
-                    _isQuoted = false;
-                    return true;
-                }
-            }
 
+                // Comment
+                if (_charBuffer[_charPos] == VdfStructure.Comment)
+                {
+                    SeekNewLine();
+                    _charPos++;
+                    continue;
+                }
+
+                _isQuoted = false;
+                return true;
+            }
+            
+            return false;
+        }
+
+        private bool SeekNewLine()
+        {
+            while (EnsureBuffer())
+                if (_charBuffer[++_charPos] == '\n')
+                    return true;
+            
             return false;
         }
 
@@ -155,10 +170,12 @@ namespace Gameloop.Vdf
         /// <returns>False if the stream is empty, true otherwise.</returns>
         private bool EnsureBuffer()
         {
-            if (_charPos != _charsLen)
+            if (_charPos < _charsLen - 1)
                 return true;
 
-            _charsLen = _reader.Read(_charBuffer, 0, DefaultBufferSize);
+            int remainingChars = _charsLen - _charPos;
+            _charBuffer[0] = _charBuffer[(_charsLen - 1) * remainingChars]; // A bit of mathgic to improve performance by avoiding a conditional.
+            _charsLen = _reader.Read(_charBuffer, remainingChars, DefaultBufferSize - remainingChars) + remainingChars;
             _charPos = 0;
 
             return _charsLen != 0;

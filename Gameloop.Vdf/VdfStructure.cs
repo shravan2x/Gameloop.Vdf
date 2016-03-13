@@ -3,7 +3,7 @@
     public static class VdfStructure
     {
         // Format
-        public const char Quote = '"', Escape = '\\';
+        public const char Quote = '"', Escape = '\\', Comment = '/';
         public const char ConditionalStart = '[', ConditionalEnd = ']';
         public const char ObjectStart = '{', ObjectEnd = '}';
 
