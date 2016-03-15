@@ -6,7 +6,7 @@ A fast, easy-to-use Valve Data Format parser for .NET
 
 ## Getting Binaries
 
-There are no releases yet.
+Vdf.NET is available as a [NuGet package](https://www.nuget.org/packages/Gameloop.Vdf). Binaries can also be found on the [releases page](https://github.com/Shravan2x/Gameloop.Vdf/releases).
 
 ## Documentation
 
