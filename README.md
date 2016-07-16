@@ -1,6 +1,7 @@
 # Vdf.NET
 
 [![NuGet](https://img.shields.io/nuget/v/Gameloop.Vdf.svg?style=flat-square)](https://www.nuget.org/packages/Gameloop.Vdf)
+[![Build status](https://ci.appveyor.com/api/projects/status/6rrt6894gy76cir4?svg=true)](https://ci.appveyor.com/project/Shravan2x/gameloop-vdf)
 
 A fast, easy-to-use Valve Data Format parser for .NET
 
