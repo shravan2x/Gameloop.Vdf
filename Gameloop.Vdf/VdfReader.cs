@@ -7,9 +7,10 @@ namespace Gameloop.Vdf
         protected const int MaximumTokenSize = 4096;
 
         public VdfSerializerSettings Settings { get; }
-        public EVdfReaderState CurrentState;
         public bool CloseInput { get; set; }
         public string Value { get; set; }
+
+        protected internal State CurrentState { get; protected set; }
 
         protected VdfReader() : this(VdfSerializerSettings.Default) { }
 
@@ -17,7 +18,7 @@ namespace Gameloop.Vdf
         {
             Settings = settings;
 
-            CurrentState = EVdfReaderState.Start;
+            CurrentState = State.Start;
             Value = null;
             CloseInput = true;
         }
@@ -26,7 +27,7 @@ namespace Gameloop.Vdf
 
         void IDisposable.Dispose()
         {
-            if (CurrentState == EVdfReaderState.Closed)
+            if (CurrentState == State.Closed)
                 return;
 
             Close();
@@ -34,18 +35,18 @@ namespace Gameloop.Vdf
 
         public virtual void Close()
         {
-            CurrentState = EVdfReaderState.Closed;
+            CurrentState = State.Closed;
             Value = null;
         }
-    }
 
-    public enum EVdfReaderState
-    {
-        Start,
-        Property,
-        Object,
-        Conditional,
-        Finished,
-        Closed
+        protected internal enum State
+        {
+            Start,
+            Property,
+            Object,
+            Conditional,
+            Finished,
+            Closed
+        }
     }
 }

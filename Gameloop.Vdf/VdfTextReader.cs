@@ -72,7 +72,7 @@ namespace Gameloop.Vdf
                 if (curChar == VdfStructure.Quote || (!_isQuoted && Char.IsWhiteSpace(curChar)))
                 {
                     Value = new string(_tokenBuffer, 0, _tokenSize);
-                    CurrentState = EVdfReaderState.Property;
+                    CurrentState = State.Property;
                     _charPos++;
                     return true;
                 }
@@ -92,13 +92,13 @@ namespace Gameloop.Vdf
                     else if (_tokenSize != 0)
                     {
                         Value = new string(_tokenBuffer, 0, _tokenSize);
-                        CurrentState = EVdfReaderState.Property;
+                        CurrentState = State.Property;
                         return true;
                     }
                     else
                     {
                         Value = curChar.ToString();
-                        CurrentState = EVdfReaderState.Object;
+                        CurrentState = State.Object;
                         _charPos++;
                         return true;
                     }
@@ -193,6 +193,13 @@ namespace Gameloop.Vdf
                     return conv[1];
 
             return ch;
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            if (CloseInput)
+                _reader.Close();
         }
     }
 }

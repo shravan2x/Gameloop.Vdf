@@ -26,7 +26,7 @@ namespace Gameloop.Vdf
             result.Key = reader.Value;
 
             reader.ReadToken();
-            if (reader.CurrentState == EVdfReaderState.Property)
+            if (reader.CurrentState == VdfReader.State.Property)
                 result.Value = new VValue(reader.Value);
             else
                 result.Value = ReadObject(reader);
@@ -39,7 +39,7 @@ namespace Gameloop.Vdf
             VObject result = new VObject();
 
             reader.ReadToken();
-            while (reader.CurrentState != EVdfReaderState.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
+            while (reader.CurrentState != VdfReader.State.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
             {
                 result.Add(ReadProperty(reader));
                 reader.ReadToken();
