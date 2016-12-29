@@ -1,10 +1,24 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace Gameloop.Vdf
 {
     public static class VdfConvert
     {
+        public static string Serialize(VToken value)
+        {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            StringBuilder stringBuilder = new StringBuilder(256);
+            StringWriter stringWriter = new StringWriter(stringBuilder, CultureInfo.InvariantCulture);
+            (new VdfSerializer()).Serialize(stringWriter, value);
+
+            return stringWriter.ToString();
+        }
+
         public static VProperty Deserialize(string value)
         {
             return Deserialize(value, VdfSerializerSettings.Default);

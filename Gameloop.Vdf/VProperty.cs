@@ -17,5 +17,11 @@ namespace Gameloop.Vdf
             Key = key;
             Value = value;
         }
+
+        public override void WriteTo(VdfWriter writer)
+        {
+            writer.WriteKey(Key);
+            Value.WriteTo(writer);
+        }
     }
 }

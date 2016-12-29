@@ -6,9 +6,17 @@ namespace Gameloop.Vdf
     {
         private readonly VdfSerializerSettings _settings;
 
+        public VdfSerializer() : this(VdfSerializerSettings.Default) { }
+
         public VdfSerializer(VdfSerializerSettings settings)
         {
             _settings = settings;
+        }
+
+        public void Serialize(TextWriter textWriter, VToken value)
+        {
+            using (VdfWriter vdfWriter = new VdfTextWriter(textWriter))
+                value.WriteTo(vdfWriter);
         }
 
         public VProperty Deserialize(TextReader textReader)

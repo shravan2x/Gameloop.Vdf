@@ -9,6 +9,11 @@
             Value = value;
         }
 
+        public override void WriteTo(VdfWriter writer)
+        {
+            writer.WriteValue(this);
+        }
+
         public override string ToString()
         {
             return Value.ToString();

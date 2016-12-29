@@ -4,9 +4,45 @@ namespace Gameloop.Vdf
 {
     public abstract class VdfWriter : IDisposable
     {
-        public void Dispose()
+        public bool CloseOutput { get; set; }
+        protected internal State CurrentState { get; protected set; }
+
+        protected VdfWriter()
         {
-            throw new NotImplementedException();
+            CurrentState = State.Start;
+            CloseOutput = true;
+        }
+
+        public abstract void WriteObjectStart();
+
+        public abstract void WriteObjectEnd();
+
+        public abstract void WriteKey(string key);
+
+        public abstract void WriteValue(VValue value);
+
+        void IDisposable.Dispose()
+        {
+            if (CurrentState == State.Closed)
+                return;
+
+            Close();
+        }
+
+        public virtual void Close()
+        {
+            CurrentState = State.Closed;
+        }
+
+        protected internal enum State
+        {
+            Start,
+            Key,
+            Value,
+            ObjectStart,
+            ObjectEnd,
+            Finished,
+            Closed
         }
     }
 }

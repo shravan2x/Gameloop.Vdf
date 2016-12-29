@@ -94,6 +94,16 @@ namespace Gameloop.Vdf
             _children.RemoveAll(x => x.Key == key);
         }
 
+        public override void WriteTo(VdfWriter writer)
+        {
+            writer.WriteObjectStart();
+
+            foreach (VProperty child in _children)
+                child.WriteTo(writer);
+
+            writer.WriteObjectEnd();
+        }
+
         #region ICustomTypeDescriptor Methods
 
         public PropertyDescriptorCollection GetProperties()
