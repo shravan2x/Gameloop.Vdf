@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Gameloop.Vdf.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Gameloop.Vdf
 {
@@ -187,5 +190,37 @@ namespace Gameloop.Vdf
         }
 
         #endregion
+
+        protected override DynamicMetaObject GetMetaObject(Expression parameter)
+        {
+            return new DynamicProxyMetaObject<VObject>(parameter, this, new VObjectDynamicProxy());
+        }
+
+        private class VObjectDynamicProxy : DynamicProxy<VObject>
+        {
+            public override bool TryGetMember(VObject instance, GetMemberBinder binder, out object result)
+            {
+                // result can be null
+                result = instance[binder.Name];
+                return true;
+            }
+
+            public override bool TrySetMember(VObject instance, SetMemberBinder binder, object value)
+            {
+                VToken v = value as VToken;
+
+                // this can throw an error if value isn't a valid for a JValue
+                if (v == null)
+                    v = new VValue(value);
+
+                instance[binder.Name] = v;
+                return true;
+            }
+
+            public override IEnumerable<string> GetDynamicMemberNames(VObject instance)
+            {
+                return instance.Children().Select(p => p.Key);
+            }
+        }
     }
 }

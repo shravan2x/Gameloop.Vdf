@@ -40,6 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\CollectionUtils.cs" />
+    <Compile Include="Utilities\DynamicProxy.cs" />
+    <Compile Include="Utilities\DynamicProxyMetaObject.cs" />
+    <Compile Include="Utilities\ReflectionUtils.cs" />
+    <Compile Include="Utilities\TypeExtensions.cs" />
     <Compile Include="VContainer.cs" />
     <Compile Include="VdfConvert.cs" />
     <Compile Include="VdfReader.cs" />
