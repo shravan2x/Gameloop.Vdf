@@ -11,8 +11,27 @@ Vdf.NET is available as a [NuGet package](https://www.nuget.org/packages/Gameloo
 
 ## Documentation
 
-There is currently no documentation for the project. It will be added in a future release.<br>
-For now, just use `VdfConvert.Deserialize(string)`.
+To deserialize a file _importantInfo.vdf_,
+```
+"Steam"
+{
+	"SSAVersion"		"3"
+	"PrivacyPolicyVersion"		"2"
+	"SteamDefaultDialog"		"#app_store"
+	"DesktopShortcutCheck"		"0"
+	"StartMenuShortcutCheck"		"0"
+}
+```
+do
+```c#
+dynamic volvo = VdfConvert.Deserialize(File.ReadAllText("importantInfo.vdf"));
+// 'volvo' is a VProperty, analogous to Json.NET's JProperty
+
+// Now do whatever with this
+Console.WriteLine(volvo.Value.SSAVersion); // Prints 3
+```
+
+Note the need to use `.Value` and skip the enclosing property name `Steam`. This is because root types in VDF are _properties_, as opposed to _objects_ in traditional JSON.
 
 ## License
 
