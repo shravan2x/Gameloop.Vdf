@@ -199,7 +199,7 @@ namespace Gameloop.Vdf
         {
             base.Close();
             if (CloseInput)
-                _reader.Close();
+                _reader.Dispose();
         }
     }
 }

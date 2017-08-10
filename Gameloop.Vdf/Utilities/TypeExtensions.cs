@@ -24,12 +24,35 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Gameloop.Vdf.Utilities
 {
     internal static class TypeExtensions
     {
+        private const BindingFlags DefaultFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
+
+        public static MethodInfo GetBaseDefinition(this MethodInfo method)
+        {
+            return method.GetRuntimeBaseDefinition();
+        }
+
+        public static MethodInfo GetMethod(this Type type, string name)
+        {
+            return type.GetMethod(name, DefaultFlags);
+        }
+
+        public static MethodInfo GetMethod(this Type type, string name, BindingFlags bindingFlags)
+        {
+            return type.GetTypeInfo().GetDeclaredMethod(name);
+        }
+
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, BindingFlags bindingFlags)
+        {
+            return type.GetTypeInfo().DeclaredMethods;
+        }
+
         public static Type BaseType(this Type type)
         {
 #if HAVE_FULL_REFLECTION

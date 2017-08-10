@@ -1,14 +1,13 @@
 ﻿using Gameloop.Vdf.Utilities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace Gameloop.Vdf
 {
-    public class VObject : VToken, ITypedList, ICustomTypeDescriptor
+    public class VObject : VToken
     {
         private readonly List<VProperty> _children;
 
@@ -106,90 +105,6 @@ namespace Gameloop.Vdf
 
             writer.WriteObjectEnd();
         }
-
-        #region ICustomTypeDescriptor Methods
-
-        public PropertyDescriptorCollection GetProperties()
-        {
-            PropertyDescriptorCollection descriptorCollection = new PropertyDescriptorCollection(null);
-
-            foreach (VProperty property in _children)
-                descriptorCollection.Add(new VPropertyDescriptor(property.Key));
-
-            return descriptorCollection;
-        }
-
-        public PropertyDescriptorCollection GetProperties(Attribute[] attributes)
-        {
-            return GetProperties();
-        }
-
-        public AttributeCollection GetAttributes()
-        {
-            return AttributeCollection.Empty;
-        }
-
-        public string GetClassName()
-        {
-            return null;
-        }
-
-        public string GetComponentName()
-        {
-            return null;
-        }
-
-        public TypeConverter GetConverter()
-        {
-            return new TypeConverter();
-        }
-
-        public EventDescriptor GetDefaultEvent()
-        {
-            return null;
-        }
-
-        public PropertyDescriptor GetDefaultProperty()
-        {
-            return null;
-        }
-
-        public object GetEditor(Type editorBaseType)
-        {
-            return null;
-        }
-
-        public EventDescriptorCollection GetEvents()
-        {
-            return EventDescriptorCollection.Empty;
-        }
-
-        public EventDescriptorCollection GetEvents(Attribute[] attributes)
-        {
-            return EventDescriptorCollection.Empty;
-        }
-
-        public object GetPropertyOwner(PropertyDescriptor pd)
-        {
-            return null;
-        }
-
-        #endregion
-
-        #region ITypedList Methods
-
-        public string GetListName(PropertyDescriptor[] listAccessors)
-        {
-            return null;
-        }
-
-        public PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
-        {
-            Console.WriteLine("hi");
-            return GetProperties();
-        }
-
-        #endregion
 
         protected override DynamicMetaObject GetMetaObject(Expression parameter)
         {

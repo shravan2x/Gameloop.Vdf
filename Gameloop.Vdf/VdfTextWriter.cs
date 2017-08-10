@@ -85,7 +85,7 @@ namespace Gameloop.Vdf
         {
             base.Close();
             if (CloseOutput)
-                _writer.Close();
+                _writer.Dispose();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gameloop.Vdf", "Gameloop.Vdf\Gameloop.Vdf.csproj", "{1F092A3D-E6A1-4215-9196-F94C3D1F7EC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gameloop.Vdf", "Gameloop.Vdf\Gameloop.Vdf.csproj", "{4380F0DC-26AD-4075-96EB-57F6B8E1C150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1F092A3D-E6A1-4215-9196-F94C3D1F7EC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F092A3D-E6A1-4215-9196-F94C3D1F7EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F092A3D-E6A1-4215-9196-F94C3D1F7EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F092A3D-E6A1-4215-9196-F94C3D1F7EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4380F0DC-26AD-4075-96EB-57F6B8E1C150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4380F0DC-26AD-4075-96EB-57F6B8E1C150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4380F0DC-26AD-4075-96EB-57F6B8E1C150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4380F0DC-26AD-4075-96EB-57F6B8E1C150}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
