@@ -21,7 +21,7 @@ namespace Gameloop.Vdf
 
         public static VProperty Deserialize(string value)
         {
-            return Deserialize(value, VdfSerializerSettings.Default);
+            return Deserialize(value, VdfSerializerSettings.Common);
         }
 
         public static VProperty Deserialize(string value, VdfSerializerSettings settings)
@@ -31,7 +31,7 @@ namespace Gameloop.Vdf
 
         public static VProperty Deserialize(TextReader reader)
         {
-            return Deserialize(reader, VdfSerializerSettings.Default);
+            return Deserialize(reader, VdfSerializerSettings.Common);
         }
 
         public static VProperty Deserialize(TextReader reader, VdfSerializerSettings settings)

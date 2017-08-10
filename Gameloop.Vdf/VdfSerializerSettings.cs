@@ -2,7 +2,12 @@
 {
     public class VdfSerializerSettings
     {
-        public static readonly VdfSerializerSettings Default = new VdfSerializerSettings();
+        public static VdfSerializerSettings Default => new VdfSerializerSettings();
+        public static VdfSerializerSettings Common => new VdfSerializerSettings
+        {
+            UsesEscapeSequences = true,
+            UsesConditionals = true
+        };
 
         /// <summary>
         /// Determines whether the parser should translate escape sequences (/n, /t, etc.).
@@ -13,5 +18,9 @@
         /// Determines whether the parser should evaluate conditional blocks ([$WINDOWS], etc.).
         /// </summary>
         public bool UsesConditionals = true;
+
+        // System information
+        public bool IsXBox360 = false, IsWin32 = true;
+        public bool IsWindows = true, IsOSX = false, IsLinux = false, IsPosix = false;
     }
 }
