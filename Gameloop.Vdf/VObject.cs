@@ -17,8 +17,7 @@ namespace Gameloop.Vdf
         {
             get
             {
-                VProperty result;
-                if (!TryGetValue(key, out result))
+                if (!TryGetValue(key, out VProperty result))
                     throw new KeyNotFoundException("The given key was not present.");
 
                 return result.Value;
@@ -26,14 +25,10 @@ namespace Gameloop.Vdf
 
             set
             {
-                VProperty result;
-                if (TryGetValue(key, out result))
-                {
+                if (TryGetValue(key, out VProperty result))
                     result.Value = value;
-                    return;
-                }
-
-                Add(key, new VProperty(key, value));
+                else
+                    Add(key, value);
             }
         }
 
