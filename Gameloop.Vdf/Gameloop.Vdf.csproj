@@ -22,13 +22,13 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>NETSTANDARD1_0</DefineConstants>
-    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.0\Gameloop.Vdf.xml</DocumentationFile>
     <DefineConstants>RELEASE;NETSTANDARD1_0</DefineConstants>
     <NoWarn>1591;1701;1702;1705</NoWarn>
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
