@@ -4,11 +4,16 @@ namespace Gameloop.Vdf
 {
     public abstract class VdfWriter : IDisposable
     {
+        public VdfSerializerSettings Settings { get; }
         public bool CloseOutput { get; set; }
         protected internal State CurrentState { get; protected set; }
 
-        protected VdfWriter()
+        protected VdfWriter() : this(VdfSerializerSettings.Default) { }
+
+        protected VdfWriter(VdfSerializerSettings settings)
         {
+            Settings = settings;
+
             CurrentState = State.Start;
             CloseOutput = true;
         }

@@ -15,7 +15,7 @@ namespace Gameloop.Vdf
 
         public void Serialize(TextWriter textWriter, VToken value)
         {
-            using (VdfWriter vdfWriter = new VdfTextWriter(textWriter))
+            using (VdfWriter vdfWriter = new VdfTextWriter(textWriter, _settings))
                 value.WriteTo(vdfWriter);
         }
 

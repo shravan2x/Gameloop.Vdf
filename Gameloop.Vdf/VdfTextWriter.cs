@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Gameloop.Vdf
 {
@@ -8,7 +9,9 @@ namespace Gameloop.Vdf
         private readonly TextWriter _writer;
         private int _indentationLevel;
 
-        public VdfTextWriter(TextWriter writer)
+        public VdfTextWriter(TextWriter writer) : this(writer, VdfSerializerSettings.Default) { }
+
+        public VdfTextWriter(TextWriter writer, VdfSerializerSettings settings) : base(settings)
         {
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
@@ -21,7 +24,7 @@ namespace Gameloop.Vdf
         {
             AutoComplete(State.Key);
             _writer.Write(VdfStructure.Quote);
-            _writer.Write(key);
+            WriteEscapedString(key);
             _writer.Write(VdfStructure.Quote);
         }
 
@@ -29,7 +32,7 @@ namespace Gameloop.Vdf
         {
             AutoComplete(State.Value);
             _writer.Write(VdfStructure.Quote);
-            _writer.Write(value);
+            WriteEscapedString(value.ToString());
             _writer.Write(VdfStructure.Quote);
         }
 
@@ -79,6 +82,26 @@ namespace Gameloop.Vdf
             }
 
             CurrentState = next;
+        }
+
+        private void WriteEscapedString(string str)
+        {
+            if (!Settings.UsesEscapeSequences)
+            {
+                _writer.Write(str);
+                return;
+            }
+
+            foreach (char ch in str)
+            {
+                if (!VdfStructure.IsEscapable(ch))
+                    _writer.Write(ch);
+                else
+                {
+                    _writer.Write(VdfStructure.Escape);
+                    _writer.Write(VdfStructure.GetEscape(ch));
+                }
+            }
         }
 
         public override void Close()

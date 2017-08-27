@@ -9,12 +9,17 @@ namespace Gameloop.Vdf
     {
         public static string Serialize(VToken value)
         {
+            return Serialize(value, VdfSerializerSettings.Common);
+        }
+
+        public static string Serialize(VToken value, VdfSerializerSettings settings)
+        {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
             StringBuilder stringBuilder = new StringBuilder(256);
             StringWriter stringWriter = new StringWriter(stringBuilder, CultureInfo.InvariantCulture);
-            (new VdfSerializer()).Serialize(stringWriter, value);
+            (new VdfSerializer(settings)).Serialize(stringWriter, value);
 
             return stringWriter.ToString();
         }

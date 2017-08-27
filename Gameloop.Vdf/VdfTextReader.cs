@@ -6,20 +6,6 @@ namespace Gameloop.Vdf
     public class VdfTextReader : VdfReader
     {
         private const int DefaultBufferSize = 1024;
-        private static readonly char[][] EscapeConversions =
-        {
-            new[] { 'n' , '\n' },
-            new[] { 't' , '\t' },
-            new[] { 'v' , '\v' },
-            new[] { 'b' , '\b' },
-            new[] { 'r' , '\r' },
-            new[] { 'f' , '\f' },
-            new[] { 'a' , '\a' },
-            new[] { '\\', '\\' },
-            new[] { '?' , '?'  },
-            new[] { '\'', '\'' },
-            new[] { '\"', '\"' },
-        };
 
         private readonly TextReader _reader;
         private readonly char[] _charBuffer, _tokenBuffer;
@@ -60,7 +46,7 @@ namespace Gameloop.Vdf
 
                 if (curChar == VdfStructure.Escape)
                 {
-                    _tokenBuffer[_tokenSize++] = !Settings.UsesEscapeSequences ? curChar : FindConversion(_charBuffer[++_charPos]);
+                    _tokenBuffer[_tokenSize++] = !Settings.UsesEscapeSequences ? curChar : VdfStructure.GetUnescape(_charBuffer[++_charPos]);
                     _charPos++;
                     continue;
                 }
@@ -179,20 +165,6 @@ namespace Gameloop.Vdf
             _charPos = 0;
 
             return _charsLen != 0;
-        }
-
-        /// <summary>
-        /// Converts the given escape code to an escape character.
-        /// </summary>
-        /// <param name="ch">The escape code.</param>
-        /// <returns>the escape character.</returns>
-        private static char FindConversion(char ch)
-        {
-            foreach (char[] conv in EscapeConversions)
-                if (conv[0] == ch)
-                    return conv[1];
-
-            return ch;
         }
 
         public override void Close()
