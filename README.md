@@ -13,7 +13,7 @@ Vdf.NET is available as a [NuGet package](https://www.nuget.org/packages/Gameloo
 
 Vdf.NET was originally written as an experiment in deserialization performance. It is significantly faster than alternatives like SteamKit's KeyValue and even Json.NET (though I admit Json.NET is far more feature rich).
 
-The test source file is [VdfNetBenchmark.cs](https://github.com/shravan2x/Gameloop.Vdf/blob/master/Tests/VdfNetBenchmarker.cs). I used version [Vdf.NET 0.4.1](https://github.com/shravan2x/Gameloop.Vdf/releases/tag/Vdf.NET_0.4.1) and the TF2 schema, which is available both in [JSON](http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=xxxxxx&format=json) and [VDF](http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=xxxxxx&format=vdf) formats (you'll need an API key to obtain those).
+The test source file is [VdfNetBenchmark.cs](https://github.com/shravan2x/Gameloop.Vdf/blob/master/Tests/VdfNetBenchmark.cs). I used version [Vdf.NET 0.4.1](https://github.com/shravan2x/Gameloop.Vdf/releases/tag/Vdf.NET_0.4.1) and the TF2 schema, which is available both in [JSON](http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=xxxxxx&format=json) and [VDF](http://api.steampowered.com/IEconItems_440/GetSchema/v0001/?key=xxxxxx&format=vdf) formats (you'll need an API key to obtain them).
 
 The following are the times taken for 10 iterations of deserializing the schema on an Intel i7-4790k processor.
 ```
