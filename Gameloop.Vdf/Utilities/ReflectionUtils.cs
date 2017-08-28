@@ -25,9 +25,11 @@
 
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Gameloop.Vdf.Utilities
 {
+#if PORTABLE
     [Flags]
     internal enum BindingFlags
     {
@@ -52,6 +54,7 @@ namespace Gameloop.Vdf.Utilities
         OptionalParamBinding = 262144,
         IgnoreReturn = 16777216
     }
+#endif
 
     internal static class ReflectionUtils
     {

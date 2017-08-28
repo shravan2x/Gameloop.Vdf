@@ -31,13 +31,21 @@ namespace Gameloop.Vdf.Utilities
 {
     internal static class TypeExtensions
     {
+#if DOTNET || PORTABLE
+#if !DOTNET
         private const BindingFlags DefaultFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
+#endif
+#endif
 
+#if (DOTNET || PORTABLE)
         public static MethodInfo GetBaseDefinition(this MethodInfo method)
         {
             return method.GetRuntimeBaseDefinition();
         }
+#endif
 
+#if (DOTNET || PORTABLE)
+#if !DOTNET
         public static MethodInfo GetMethod(this Type type, string name)
         {
             return type.GetMethod(name, DefaultFlags);
@@ -52,6 +60,8 @@ namespace Gameloop.Vdf.Utilities
         {
             return type.GetTypeInfo().DeclaredMethods;
         }
+#endif
+#endif
 
         public static Type BaseType(this Type type)
         {
