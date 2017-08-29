@@ -46,6 +46,10 @@ Console.WriteLine(volvo.Value.SSAVersion); // Prints 3
 
 Note the need to use `.Value` and skip the enclosing property name `Steam`. This is because root types in VDF are _properties_, as opposed to _objects_ in traditional JSON.
 
+## Extensions
+
+[Gameloop.Vdf.JsonConverter](https://github.com/shravan2x/Gameloop.Vdf.JsonConverter): VDF-JSON converters for Vdf.NET.
+
 ## License
 
 Vdf.NET is released under the [MIT license](https://opensource.org/licenses/MIT).
