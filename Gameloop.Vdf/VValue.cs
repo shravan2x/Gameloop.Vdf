@@ -1,4 +1,6 @@
-﻿namespace Gameloop.Vdf
+﻿using System;
+
+namespace Gameloop.Vdf
 {
     public class VValue : VToken
     {
@@ -16,7 +18,7 @@
 
         public override string ToString()
         {
-            return Value.ToString();
+            return Value?.ToString() ?? String.Empty;
         }
     }
 }
