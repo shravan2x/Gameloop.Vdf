@@ -46,6 +46,25 @@ Console.WriteLine(volvo.Value.SSAVersion); // Prints 3
 
 Note the need to use `.Value` and skip the enclosing property name `Steam`. This is because root types in VDF are _properties_, as opposed to _objects_ in traditional JSON.
 
+#### Deserialization using models
+
+Vdf.NET does not natively support deserializing to models, but this can be achieved indirectly using the [Gameloop.Vdf.JsonConverter](https://github.com/shravan2x/Gameloop.Vdf.JsonConverter) extension such as:
+
+```c#
+VProperty volvo = VdfConvert.Deserialize(File.ReadAllText("importantInfo.vdf"));
+SteamModel sm = volvo.ToJson().ToObject<SteamModel>();
+```
+where `SteamModel` is something like
+```c#
+class SteamModel
+{
+	public int SSAVersion { get; set; } // Json.NET automatically converts strings to target types
+	public int PrivacyPolicyVersion { get; set; }
+	public string SteamDefaultDialog { get; set; }
+	...
+}
+```
+
 ## Extensions
 
 [Gameloop.Vdf.JsonConverter](https://github.com/shravan2x/Gameloop.Vdf.JsonConverter): VDF-JSON converters for Vdf.NET.
