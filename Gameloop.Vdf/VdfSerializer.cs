@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Gameloop.Vdf
 {
@@ -23,7 +24,8 @@ namespace Gameloop.Vdf
         {
             using (VdfReader vdfReader = new VdfTextReader(textReader, _settings))
             {
-                vdfReader.ReadToken();
+                if (!vdfReader.ReadToken())
+                    throw new VdfException("Incomplete VDF data.");
                 return ReadProperty(vdfReader);
             }
         }
@@ -33,7 +35,9 @@ namespace Gameloop.Vdf
             VProperty result = new VProperty();
             result.Key = reader.Value;
 
-            reader.ReadToken();
+            if (!reader.ReadToken())
+                throw new VdfException("Incomplete VDF data.");
+
             if (reader.CurrentState == VdfReader.State.Property)
                 result.Value = new VValue(reader.Value);
             else
@@ -46,11 +50,14 @@ namespace Gameloop.Vdf
         {
             VObject result = new VObject();
 
-            reader.ReadToken();
+            if (!reader.ReadToken())
+                throw new VdfException("Incomplete VDF data.");
+
             while (reader.CurrentState != VdfReader.State.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
             {
                 result.Add(ReadProperty(reader));
-                reader.ReadToken();
+                if (!reader.ReadToken())
+                    throw new VdfException("Incomplete VDF data.");
             }
 
             return result;
