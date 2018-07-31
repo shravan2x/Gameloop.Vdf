@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;net45</TargetFrameworks>
-    <Description>A high-performance  framework for the Valve Data Format, also called KeyValues.</Description>
+    <Description>A high-performance framework for the Valve Data Format, also called KeyValues.</Description>
     <Copyright>Copyright © Shravan Rajinikanth 2016</Copyright>
     <Company>Gameloop</Company>
     <Authors>Shravan Rajinikanth</Authors>
@@ -38,7 +38,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
 

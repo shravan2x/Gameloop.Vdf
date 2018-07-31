@@ -11,6 +11,11 @@ namespace Gameloop.Vdf
     {
         private readonly List<VProperty> _children;
 
+        public VObject()
+        {
+            _children = new List<VProperty>();
+        }
+
         public int Count => _children.Count;
 
         public override VToken this[object key]
@@ -52,11 +57,6 @@ namespace Gameloop.Vdf
                 else
                     Add(key, value);
             }
-        }
-
-        public VObject()
-        {
-            _children = new List<VProperty>();
         }
 
         public override IEnumerable<VProperty> Children()
