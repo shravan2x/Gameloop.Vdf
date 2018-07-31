@@ -58,6 +58,23 @@ namespace Gameloop.Vdf.Utilities
 
     internal static class ReflectionUtils
     {
+        public static bool IsNullable(Type t)
+        {
+            ValidationUtils.ArgumentNotNull(t, nameof(t));
+
+            if (t.IsValueType())
+                return IsNullableType(t);
+
+            return true;
+        }
+
+        public static bool IsNullableType(Type t)
+        {
+            ValidationUtils.ArgumentNotNull(t, nameof(t));
+
+            return (t.IsGenericType() && t.GetGenericTypeDefinition() == typeof(Nullable<>));
+        }
+
         public static bool IsMethodOverridden(Type currentType, Type methodDeclaringType, string method)
         {
             bool isMethodOverriden = currentType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)

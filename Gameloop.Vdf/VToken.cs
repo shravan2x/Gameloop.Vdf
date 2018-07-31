@@ -1,18 +1,57 @@
-﻿using Gameloop.Vdf.Utilities;
+﻿using Gameloop.Vdf.Linq;
+using Gameloop.Vdf.Utilities;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Gameloop.Vdf
 {
-    public abstract class VToken : IDynamicMetaObjectProvider
+    public abstract class VToken : IVEnumerable<VToken>, IDynamicMetaObjectProvider
     {
         public VToken Parent { get; set; }
         public VToken Previous { get; set; }
         public VToken Next { get; set; }
 
         public abstract void WriteTo(VdfWriter writer);
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<VToken>) this).GetEnumerator();
+        }
+
+        IEnumerator<VToken> IEnumerable<VToken>.GetEnumerator()
+        {
+            return Children().GetEnumerator();
+        }
+
+        IVEnumerable<VToken> IVEnumerable<VToken>.this[object key] => this[key];
+
+        public virtual VToken this[object key]
+        {
+            get => throw new InvalidOperationException($"Cannot access child value on {GetType()}.");
+            set => throw new InvalidOperationException($"Cannot set child value on {GetType()}.");
+        }
+
+        public virtual T Value<T>(object key)
+        {
+            VToken token = this[key];
+            return (token == null ? default(T) : Extensions.Convert<VToken, T>(token));
+        }
+
+        public virtual IEnumerable<VProperty> Children()
+        {
+            return Enumerable.Empty<VProperty>();
+        }
+
+        public IEnumerable<T> Children<T>() where T : VToken
+        {
+            return Children().OfType<T>();
+        }
 
         protected virtual DynamicMetaObject GetMetaObject(Expression parameter)
         {

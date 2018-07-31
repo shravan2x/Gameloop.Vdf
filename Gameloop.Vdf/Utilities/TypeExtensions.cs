@@ -37,6 +37,15 @@ namespace Gameloop.Vdf.Utilities
 #endif
 #endif
 
+    public static bool IsGenericType(this Type type)
+    {
+#if HAVE_FULL_REFLECTION
+        return type.IsGenericType;
+#else
+        return type.GetTypeInfo().IsGenericType;
+#endif
+    }
+
 #if (DOTNET || PORTABLE)
         public static MethodInfo GetBaseDefinition(this MethodInfo method)
         {

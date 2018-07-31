@@ -13,6 +13,28 @@ namespace Gameloop.Vdf
 
         public int Count => _children.Count;
 
+        public override VToken this[object key]
+        {
+            get
+            {
+                ValidationUtils.ArgumentNotNull(key, nameof(key));
+
+                if (!(key is string propertyName))
+                    throw new ArgumentException($"Accessed JObject values with invalid key value: {MiscellaneousUtils.ToString(key)}. Object property name expected.");
+
+                return this[propertyName];
+            }
+            set
+            {
+                ValidationUtils.ArgumentNotNull(key, nameof(key));
+
+                if (!(key is string propertyName))
+                    throw new ArgumentException($"Set JObject values with invalid key value: {MiscellaneousUtils.ToString(key)}. Object property name expected.");
+
+                this[propertyName] = value;
+            }
+        }
+
         public VToken this[string key]
         {
             get
@@ -37,7 +59,7 @@ namespace Gameloop.Vdf
             _children = new List<VProperty>();
         }
 
-        public IEnumerable<VProperty> Children()
+        public override IEnumerable<VProperty> Children()
         {
             return _children;
         }
