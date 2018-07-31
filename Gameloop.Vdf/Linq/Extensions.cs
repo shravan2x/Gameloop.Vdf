@@ -64,7 +64,8 @@ namespace Gameloop.Vdf.Linq
         {
             result = default(U);
 
-            if (typeof(U) == typeof(bool) && value is string valueString)
+            // It won't be null at this point, so just handle the nullable type.
+            if ((typeof(U) == typeof(bool) || Nullable.GetUnderlyingType(typeof(U)) == typeof(bool)) && value is string valueString)
             {
                 switch (valueString)
                 {
