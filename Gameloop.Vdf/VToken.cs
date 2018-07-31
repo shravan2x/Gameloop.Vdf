@@ -13,9 +13,10 @@ namespace Gameloop.Vdf
 {
     public abstract class VToken : IVEnumerable<VToken>, IDynamicMetaObjectProvider
     {
-        public VToken Parent { get; set; }
-        public VToken Previous { get; set; }
-        public VToken Next { get; set; }
+        // TODO: Implement these.
+        public VToken Parent { get; internal set; }
+        public VToken Previous { get; internal set; }
+        public VToken Next { get; internal set; }
 
         public abstract void WriteTo(VdfWriter writer);
 
