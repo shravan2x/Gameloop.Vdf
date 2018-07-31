@@ -45,7 +45,7 @@ namespace Gameloop.Vdf.Linq
             get
             {
                 if (!TryGetValue(key, out VToken result))
-                    throw new KeyNotFoundException("The given key was not present.");
+                    return null;
 
                 return result;
             }
