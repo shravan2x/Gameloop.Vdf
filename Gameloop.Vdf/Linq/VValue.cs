@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gameloop.Vdf
+namespace Gameloop.Vdf.Linq
 {
     public class VValue : VToken
     {

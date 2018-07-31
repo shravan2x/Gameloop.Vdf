@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gameloop.Vdf.Linq;
+using System;
 
 namespace Gameloop.Vdf
 {

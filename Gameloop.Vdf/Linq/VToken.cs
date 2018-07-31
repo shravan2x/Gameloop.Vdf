@@ -1,5 +1,4 @@
-﻿using Gameloop.Vdf.Linq;
-using Gameloop.Vdf.Utilities;
+﻿using Gameloop.Vdf.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Gameloop.Vdf
+namespace Gameloop.Vdf.Linq
 {
     public abstract class VToken : IVEnumerable<VToken>, IDynamicMetaObjectProvider
     {

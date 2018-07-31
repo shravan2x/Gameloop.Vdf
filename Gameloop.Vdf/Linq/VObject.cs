@@ -5,9 +5,9 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Gameloop.Vdf
+namespace Gameloop.Vdf.Linq
 {
-    public class VObject : VToken
+    public class VObject : VToken, IDictionary<string, VToken>
     {
         private readonly List<VProperty> _children;
 
@@ -44,20 +44,25 @@ namespace Gameloop.Vdf
         {
             get
             {
-                if (!TryGetValue(key, out VProperty result))
+                if (!TryGetValue(key, out VToken result))
                     throw new KeyNotFoundException("The given key was not present.");
 
-                return result.Value;
+                return result;
             }
 
             set
             {
-                if (TryGetValue(key, out VProperty result))
-                    result.Value = value;
+                VProperty prop = _children.FirstOrDefault(x => x.Key == key);
+                if (prop != null)
+                    prop.Value = value;
                 else
                     Add(key, value);
             }
         }
+
+        ICollection<string> IDictionary<string, VToken>.Keys => _children.Select(x => x.Key).ToList();
+
+        ICollection<VToken> IDictionary<string, VToken>.Values => throw new NotImplementedException();
 
         public override IEnumerable<VProperty> Children()
         {
@@ -102,10 +107,10 @@ namespace Gameloop.Vdf
             return _children.RemoveAll(x => x.Key == key) != 0;
         }
 
-        public bool TryGetValue(string key, out VProperty value)
+        public bool TryGetValue(string key, out VToken value)
         {
-            value = _children.FirstOrDefault(x => x.Key == key);
-            return value != null;
+            value = _children.FirstOrDefault(x => x.Key == key)?.Value;
+            return (value != null);
         }
 
         public void RemoveAt(string key)
@@ -122,6 +127,61 @@ namespace Gameloop.Vdf
 
             writer.WriteObjectEnd();
         }
+
+        #region ICollection<KeyValuePair<string,JToken>> Members
+
+        public IEnumerator<KeyValuePair<string, VToken>> GetEnumerator()
+        {
+            foreach (VProperty property in _children)
+                yield return new KeyValuePair<string, VToken>(property.Key, property.Value);
+        }
+
+        void ICollection<KeyValuePair<string, VToken>>.Add(KeyValuePair<string, VToken> item)
+        {
+            Add(new VProperty(item.Key, item.Value));
+        }
+
+        void ICollection<KeyValuePair<string, VToken>>.Clear()
+        {
+            _children.Clear();
+        }
+
+        bool ICollection<KeyValuePair<string, VToken>>.Contains(KeyValuePair<string, VToken> item)
+        {
+            VProperty property = _children.FirstOrDefault(x => x.Key == item.Key);
+            if (property == null)
+                return false;
+
+            return (property.Value == item.Value);
+        }
+
+        void ICollection<KeyValuePair<string, VToken>>.CopyTo(KeyValuePair<string, VToken>[] array, int arrayIndex)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+            if (arrayIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), "arrayIndex is less than 0.");
+            if (arrayIndex >= array.Length && arrayIndex != 0)
+                throw new ArgumentException("arrayIndex is equal to or greater than the length of array.");
+            if (Count > array.Length - arrayIndex)
+                throw new ArgumentException("The number of elements in the source JObject is greater than the available space from arrayIndex to the end of the destination array.");
+
+            for (int index = 0; index < _children.Count; index++)
+                array[arrayIndex + index] = new KeyValuePair<string, VToken>(_children[index].Key, _children[index].Value);
+        }
+
+        bool ICollection<KeyValuePair<string, VToken>>.IsReadOnly => false;
+
+        bool ICollection<KeyValuePair<string, VToken>>.Remove(KeyValuePair<string, VToken> item)
+        {
+            if (!((ICollection<KeyValuePair<string, VToken>>) this).Contains(item))
+                return false;
+
+            ((IDictionary<string, VToken>) this).Remove(item.Key);
+            return true;
+        }
+
+        #endregion
 
         protected override DynamicMetaObject GetMetaObject(Expression parameter)
         {
