@@ -26,6 +26,12 @@ namespace Gameloop.Vdf
             {
                 if (!vdfReader.ReadToken())
                     throw new VdfException("Incomplete VDF data.");
+
+                // For now, we discard these comments.
+                while (vdfReader.CurrentState == VdfReader.State.Comment)
+                    if (!vdfReader.ReadToken())
+                        throw new VdfException("Incomplete VDF data.");
+
                 return ReadProperty(vdfReader);
             }
         }
@@ -37,6 +43,11 @@ namespace Gameloop.Vdf
 
             if (!reader.ReadToken())
                 throw new VdfException("Incomplete VDF data.");
+
+            // For now, we discard these comments.
+            while (reader.CurrentState == VdfReader.State.Comment)
+                if (!reader.ReadToken())
+                    throw new VdfException("Incomplete VDF data.");
 
             if (reader.CurrentState == VdfReader.State.Property)
                 result.Value = new VValue(reader.Value);
@@ -53,9 +64,13 @@ namespace Gameloop.Vdf
             if (!reader.ReadToken())
                 throw new VdfException("Incomplete VDF data.");
 
-            while (reader.CurrentState != VdfReader.State.Object || reader.Value != VdfStructure.ObjectEnd.ToString())
+            while (!(reader.CurrentState == VdfReader.State.Object && reader.Value == VdfStructure.ObjectEnd.ToString()))
             {
-                result.Add(ReadProperty(reader));
+                if (reader.CurrentState == VdfReader.State.Comment)
+                    result.Add(VValue.CreateComment(reader.Value));
+                else
+                    result.Add(ReadProperty(reader));
+
                 if (!reader.ReadToken())
                     throw new VdfException("Incomplete VDF data.");
             }

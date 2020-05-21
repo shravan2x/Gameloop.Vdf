@@ -18,6 +18,8 @@ namespace Gameloop.Vdf.Linq
             Value = value;
         }
 
+        public override VTokenType Type => VTokenType.Property;
+
         public override void WriteTo(VdfWriter writer)
         {
             writer.WriteKey(Key);

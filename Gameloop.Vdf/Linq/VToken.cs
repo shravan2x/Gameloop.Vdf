@@ -19,6 +19,8 @@ namespace Gameloop.Vdf.Linq
 
         public abstract void WriteTo(VdfWriter writer);
 
+        public abstract VTokenType Type { get; }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<VToken>) this).GetEnumerator();
@@ -43,9 +45,9 @@ namespace Gameloop.Vdf.Linq
             return (token == null ? default(T) : Extensions.Convert<VToken, T>(token));
         }
 
-        public virtual IEnumerable<VProperty> Children()
+        public virtual IEnumerable<VToken> Children()
         {
-            return Enumerable.Empty<VProperty>();
+            return Enumerable.Empty<VToken>();
         }
 
         public IEnumerable<T> Children<T>() where T : VToken

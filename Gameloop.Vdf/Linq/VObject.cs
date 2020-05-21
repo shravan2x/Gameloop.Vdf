@@ -7,14 +7,16 @@ using System.Linq.Expressions;
 
 namespace Gameloop.Vdf.Linq
 {
-    public class VObject : VToken, IDictionary<string, VToken>
+    public class VObject : VToken, IList<VToken>, IDictionary<string, VToken>
     {
-        private readonly List<VProperty> _children;
+        private readonly List<VToken> _children;
 
         public VObject()
         {
-            _children = new List<VProperty>();
+            _children = new List<VToken>();
         }
+
+        public override VTokenType Type => VTokenType.Object;
 
         public int Count => _children.Count;
 
@@ -40,6 +42,12 @@ namespace Gameloop.Vdf.Linq
             }
         }
 
+        public VToken this[int index]
+        {
+            get => _children[index];
+            set => _children[index] = value;
+        }
+
         public VToken this[string key]
         {
             get
@@ -52,7 +60,7 @@ namespace Gameloop.Vdf.Linq
 
             set
             {
-                VProperty prop = _children.FirstOrDefault(x => x.Key == key);
+                VProperty prop = Properties().FirstOrDefault(x => x.Key == key);
                 if (prop != null)
                     prop.Value = value;
                 else
@@ -60,21 +68,25 @@ namespace Gameloop.Vdf.Linq
             }
         }
 
-        ICollection<string> IDictionary<string, VToken>.Keys => _children.Select(x => x.Key).ToList();
+        public bool IsReadOnly => false;
+
+        ICollection<string> IDictionary<string, VToken>.Keys => Properties().Select(x => x.Key).ToList();
 
         ICollection<VToken> IDictionary<string, VToken>.Values => throw new NotImplementedException();
 
-        public override IEnumerable<VProperty> Children()
+        public override IEnumerable<VToken> Children()
         {
             return _children;
         }
 
+        public IEnumerable<VProperty> Properties()
+        {
+            return _children.Where(x => x is VProperty).OfType<VProperty>();
+        }
+
         public void Add(string key, VToken value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-
-            _children.Add(new VProperty(key, value));
+            Add(new VProperty(key, value));
         }
 
         public void Add(VProperty property)
@@ -87,42 +99,67 @@ namespace Gameloop.Vdf.Linq
             _children.Add(property);
         }
 
+        public void Add(VToken token)
+        {
+            _children.Add(token);
+        }
+
         public void Clear()
         {
             _children.Clear();
         }
 
-        public bool ContainsKey(string key)
+        public bool Contains(VToken item)
         {
-            return _children.Exists(x => x.Key == key);
+            return _children.Contains(item);
         }
 
-        public void CopyTo(VProperty[] array, int arrayIndex)
+        public bool ContainsKey(string key)
+        {
+            return Properties().Any(x => x.Key == key);
+        }
+
+        public void CopyTo(VToken[] array, int arrayIndex)
         {
             _children.CopyTo(array, arrayIndex);
         }
 
+        public int IndexOf(VToken item)
+        {
+            return _children.IndexOf(item);
+        }
+
+        public void Insert(int index, VToken item)
+        {
+            _children.Insert(index, item);
+        }
+
         public bool Remove(string key)
         {
-            return _children.RemoveAll(x => x.Key == key) != 0;
+            return _children.RemoveAll(x => x is VProperty p && p.Key == key) != 0;
+        }
+
+        public bool Remove(VToken item)
+        {
+            return _children.Remove(item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            _children.RemoveAt(index);
         }
 
         public bool TryGetValue(string key, out VToken value)
         {
-            value = _children.FirstOrDefault(x => x.Key == key)?.Value;
+            value = Properties().FirstOrDefault(x => x.Key == key)?.Value;
             return (value != null);
-        }
-
-        public void RemoveAt(string key)
-        {
-            _children.RemoveAll(x => x.Key == key);
         }
 
         public override void WriteTo(VdfWriter writer)
         {
             writer.WriteObjectStart();
 
-            foreach (VProperty child in _children)
+            foreach (VToken child in _children)
                 child.WriteTo(writer);
 
             writer.WriteObjectEnd();
@@ -132,7 +169,7 @@ namespace Gameloop.Vdf.Linq
 
         public IEnumerator<KeyValuePair<string, VToken>> GetEnumerator()
         {
-            foreach (VProperty property in _children)
+            foreach (VProperty property in Properties())
                 yield return new KeyValuePair<string, VToken>(property.Key, property.Value);
         }
 
@@ -148,7 +185,7 @@ namespace Gameloop.Vdf.Linq
 
         bool ICollection<KeyValuePair<string, VToken>>.Contains(KeyValuePair<string, VToken> item)
         {
-            VProperty property = _children.FirstOrDefault(x => x.Key == item.Key);
+            VProperty property = Properties().FirstOrDefault(x => x.Key == item.Key);
             if (property == null)
                 return false;
 
@@ -166,8 +203,9 @@ namespace Gameloop.Vdf.Linq
             if (Count > array.Length - arrayIndex)
                 throw new ArgumentException("The number of elements in the source JObject is greater than the available space from arrayIndex to the end of the destination array.");
 
-            for (int index = 0; index < _children.Count; index++)
-                array[arrayIndex + index] = new KeyValuePair<string, VToken>(_children[index].Key, _children[index].Value);
+            int index = 0;
+            foreach (VProperty property in Properties())
+                array[arrayIndex + index++] = new KeyValuePair<string, VToken>(property.Key, property.Value);
         }
 
         bool ICollection<KeyValuePair<string, VToken>>.IsReadOnly => false;
@@ -211,7 +249,7 @@ namespace Gameloop.Vdf.Linq
 
             public override IEnumerable<string> GetDynamicMemberNames(VObject instance)
             {
-                return instance.Children().Select(p => p.Key);
+                return instance.Properties().Select(p => p.Key);
             }
         }
     }
