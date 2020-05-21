@@ -27,6 +27,8 @@ namespace Gameloop.Vdf
 
         public abstract void WriteValue(VValue value);
 
+        public abstract void WriteComment(string text);
+
         void IDisposable.Dispose()
         {
             if (CurrentState == State.Closed)
@@ -47,6 +49,7 @@ namespace Gameloop.Vdf
             Value,
             ObjectStart,
             ObjectEnd,
+            Comment,
             Finished,
             Closed
         }

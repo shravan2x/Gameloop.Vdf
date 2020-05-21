@@ -10,7 +10,7 @@ namespace Gameloop.Vdf
         private readonly TextReader _reader;
         private readonly char[] _charBuffer, _tokenBuffer;
         private int _charPos, _charsLen, _tokenSize;
-        private bool _isQuoted;
+        private bool _isQuoted, _isComment;
 
         public VdfTextReader(TextReader reader) : this(reader, VdfSerializerSettings.Default) { }
 
@@ -25,6 +25,7 @@ namespace Gameloop.Vdf
             _charPos = _charsLen = 0;
             _tokenSize = 0;
             _isQuoted = false;
+            _isComment = false;
         }
 
         /// <summary>
@@ -42,11 +43,38 @@ namespace Gameloop.Vdf
             {
                 char curChar = _charBuffer[_charPos];
 
+                #region Comment
+
+                if (_isComment)
+                {
+                    if (curChar == '\r' || curChar == '\n')
+                    {
+                        _isComment = false;
+                        Value = new string(_tokenBuffer, 0, _tokenSize);
+                        CurrentState = State.Comment;
+                        return true;
+                    }
+                    else
+                    {
+                        _tokenBuffer[_tokenSize++] = curChar;
+                        _charPos++;
+                        continue;
+                    }
+                }
+                else if (_tokenSize == 0 && curChar == VdfStructure.Comment && _charBuffer[_charPos + 1] == VdfStructure.Comment)
+                {
+                    _isComment = true;
+                    _charPos += 2;
+                    continue;
+                }
+
+                #endregion
+
                 #region Escape
 
                 if (curChar == VdfStructure.Escape)
                 {
-                    _tokenBuffer[_tokenSize++] = !Settings.UsesEscapeSequences ? curChar : VdfStructure.GetUnescape(_charBuffer[++_charPos]);
+                    _tokenBuffer[_tokenSize++] = (!Settings.UsesEscapeSequences ? curChar : VdfStructure.GetUnescape(_charBuffer[++_charPos]));
                     _charPos++;
                     continue;
                 }
@@ -124,14 +152,6 @@ namespace Gameloop.Vdf
                     _isQuoted = true;
                     _charPos++;
                     return true;
-                }
-
-                // Comment
-                if (_charBuffer[_charPos] == VdfStructure.Comment)
-                {
-                    SeekNewLine();
-                    _charPos++;
-                    continue;
                 }
 
                 _isQuoted = false;

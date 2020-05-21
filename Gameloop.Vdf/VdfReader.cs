@@ -44,6 +44,7 @@ namespace Gameloop.Vdf
             Start,
             Property,
             Object,
+            Comment,
             Conditional,
             Finished,
             Closed

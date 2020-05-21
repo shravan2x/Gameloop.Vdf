@@ -54,7 +54,15 @@ namespace Gameloop.Vdf
             if (_indentationLevel == 0)
                 AutoComplete(State.Finished);
         }
-        
+
+        public override void WriteComment(string text)
+        {
+            AutoComplete(State.Comment);
+            _writer.Write(VdfStructure.Comment);
+            _writer.Write(VdfStructure.Comment);
+            _writer.Write(text);
+        }
+
         private void AutoComplete(State next)
         {
             if (CurrentState == State.Start)
@@ -72,6 +80,7 @@ namespace Gameloop.Vdf
                 case State.Key:
                 case State.ObjectStart:
                 case State.ObjectEnd:
+                case State.Comment:
                     _writer.WriteLine();
                     _writer.Write(new string(VdfStructure.Indent, _indentationLevel));
                     break;
