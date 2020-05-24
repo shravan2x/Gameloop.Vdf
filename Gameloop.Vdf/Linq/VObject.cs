@@ -106,6 +106,9 @@ namespace Gameloop.Vdf.Linq
 
         public void Add(VToken token)
         {
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
+
             _children.Add(token);
         }
 
