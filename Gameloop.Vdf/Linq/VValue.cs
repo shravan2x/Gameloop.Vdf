@@ -5,15 +5,15 @@ namespace Gameloop.Vdf.Linq
     public class VValue : VToken
     {
         private readonly VTokenType _tokenType;
-        public object Value { get; set; }
+        public object? Value { get; set; }
 
-        private VValue(object value, VTokenType type)
+        private VValue(object? value, VTokenType type)
         {
             Value = value;
             _tokenType = type;
         }
 
-        public VValue(object value)
+        public VValue(object? value)
             : this(value, VTokenType.Value) { }
 
         public VValue(VValue other)
@@ -49,7 +49,7 @@ namespace Gameloop.Vdf.Linq
             if (!(token is VValue otherVal))
                 return false;
 
-            return (this == otherVal || (Type == otherVal.Type && Value.Equals(otherVal.Value)));
+            return (this == otherVal || (Type == otherVal.Type && Value != null && Value.Equals(otherVal.Value)));
         }
     }
 }

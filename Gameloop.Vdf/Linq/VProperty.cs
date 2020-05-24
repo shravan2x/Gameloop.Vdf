@@ -4,10 +4,9 @@ namespace Gameloop.Vdf.Linq
 {
     public class VProperty : VToken
     {
+        // Json.NET calls this 'Name', but since VDF is technically KeyValues we call it a 'Key'.
         public string Key { get; set; }
         public VToken Value { get; set; }
-
-        public VProperty() { }
 
         public VProperty(string key, VToken value)
         {

@@ -16,30 +16,29 @@ namespace Gameloop.Vdf
 
         public void Serialize(TextWriter textWriter, VToken value)
         {
-            using (VdfWriter vdfWriter = new VdfTextWriter(textWriter, _settings))
-                value.WriteTo(vdfWriter);
+            using VdfWriter vdfWriter = new VdfTextWriter(textWriter, _settings);
+            value.WriteTo(vdfWriter);
         }
 
         public VProperty Deserialize(TextReader textReader)
         {
-            using (VdfReader vdfReader = new VdfTextReader(textReader, _settings))
-            {
+            using VdfReader vdfReader = new VdfTextReader(textReader, _settings);
+
+            if (!vdfReader.ReadToken())
+                throw new VdfException("Incomplete VDF data.");
+
+            // For now, we discard these comments.
+            while (vdfReader.CurrentState == VdfReader.State.Comment)
                 if (!vdfReader.ReadToken())
                     throw new VdfException("Incomplete VDF data.");
 
-                // For now, we discard these comments.
-                while (vdfReader.CurrentState == VdfReader.State.Comment)
-                    if (!vdfReader.ReadToken())
-                        throw new VdfException("Incomplete VDF data.");
-
-                return ReadProperty(vdfReader);
-            }
+            return ReadProperty(vdfReader);
         }
 
         private VProperty ReadProperty(VdfReader reader)
         {
-            VProperty result = new VProperty();
-            result.Key = reader.Value;
+            // Setting it to null is temporary, we'll set Value in just a second.
+            VProperty result = new VProperty(reader.Value, null!);
 
             if (!reader.ReadToken())
                 throw new VdfException("Incomplete VDF data.");

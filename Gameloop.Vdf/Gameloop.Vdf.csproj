@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;net45</TargetFrameworks>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
     <Description>A high-performance framework for the Valve Data Format, also called KeyValues.</Description>
     <Copyright>Copyright © Shravan Rajinikanth 2016</Copyright>
     <Company>Gameloop</Company>
