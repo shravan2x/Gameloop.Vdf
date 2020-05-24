@@ -33,6 +33,11 @@ namespace Gameloop.Vdf.Linq
 
         IVEnumerable<VToken> IVEnumerable<VToken>.this[object key] => this[key];
 
+        public static bool DeepEquals(VToken t1, VToken t2)
+        {
+            return (t1 == t2 || (t1 != null && t2 != null && t1.DeepEquals(t2)));
+        }
+
         public abstract VToken DeepClone();
 
         public virtual VToken this[object key]
@@ -56,6 +61,8 @@ namespace Gameloop.Vdf.Linq
         {
             return Children().OfType<T>();
         }
+
+        protected abstract bool DeepEquals(VToken node);
 
         protected virtual DynamicMetaObject GetMetaObject(Expression parameter)
         {

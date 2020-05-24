@@ -43,5 +43,13 @@ namespace Gameloop.Vdf.Linq
         {
             return new VValue(value, VTokenType.Comment);
         }
+
+        protected override bool DeepEquals(VToken token)
+        {
+            if (!(token is VValue otherVal))
+                return false;
+
+            return (this == otherVal || (Type == otherVal.Type && Value.Equals(otherVal.Value)));
+        }
     }
 }

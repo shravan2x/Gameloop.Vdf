@@ -33,5 +33,10 @@ namespace Gameloop.Vdf.Linq
             writer.WriteKey(Key);
             Value.WriteTo(writer);
         }
+
+        protected override bool DeepEquals(VToken node)
+        {
+            return (node is VProperty otherProp && Key == otherProp.Key && VToken.DeepEquals(Value, otherProp.Value));
+        }
     }
 }

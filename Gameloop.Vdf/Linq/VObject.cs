@@ -231,6 +231,14 @@ namespace Gameloop.Vdf.Linq
 
         #endregion
 
+        protected override bool DeepEquals(VToken token)
+        {
+            if (!(token is VObject otherObj))
+                return false;
+
+            return (_children.Count == otherObj._children.Count && Enumerable.Range(0, _children.Count).All(x => VToken.DeepEquals(_children[x], otherObj._children[x])));
+        }
+
         protected override DynamicMetaObject GetMetaObject(Expression parameter)
         {
             return new DynamicProxyMetaObject<VObject>(parameter, this, new VObjectDynamicProxy());
