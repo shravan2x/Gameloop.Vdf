@@ -16,6 +16,11 @@ namespace Gameloop.Vdf.Linq
             _children = new List<VToken>();
         }
 
+        public VObject(VObject other)
+        {
+            _children = other._children.Select(x => x.DeepClone()).ToList();
+        }
+
         public override VTokenType Type => VTokenType.Object;
 
         public int Count => _children.Count;
@@ -122,6 +127,11 @@ namespace Gameloop.Vdf.Linq
         public void CopyTo(VToken[] array, int arrayIndex)
         {
             _children.CopyTo(array, arrayIndex);
+        }
+
+        public override VToken DeepClone()
+        {
+            return new VObject(this);
         }
 
         public int IndexOf(VToken item)

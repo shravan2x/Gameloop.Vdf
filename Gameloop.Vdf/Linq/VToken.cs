@@ -33,6 +33,8 @@ namespace Gameloop.Vdf.Linq
 
         IVEnumerable<VToken> IVEnumerable<VToken>.this[object key] => this[key];
 
+        public abstract VToken DeepClone();
+
         public virtual VToken this[object key]
         {
             get => throw new InvalidOperationException($"Cannot access child value on {GetType()}.");

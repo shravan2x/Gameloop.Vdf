@@ -18,7 +18,15 @@ namespace Gameloop.Vdf.Linq
             Value = value;
         }
 
+        public VProperty(VProperty other)
+            : this(other.Key, other.Value.DeepClone()) { }
+
         public override VTokenType Type => VTokenType.Property;
+
+        public override VToken DeepClone()
+        {
+            return new VProperty(this);
+        }
 
         public override void WriteTo(VdfWriter writer)
         {

@@ -16,7 +16,15 @@ namespace Gameloop.Vdf.Linq
         public VValue(object value)
             : this(value, VTokenType.Value) { }
 
+        public VValue(VValue other)
+            : this(other.Value, other.Type) { }
+
         public override VTokenType Type => _tokenType;
+
+        public override VToken DeepClone()
+        {
+            return new VValue(this);
+        }
 
         public override void WriteTo(VdfWriter writer)
         {
