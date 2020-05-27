@@ -44,6 +44,11 @@ namespace Gameloop.Vdf.Linq
             return new VValue(value, VTokenType.Comment);
         }
 
+        public static VValue CreateEmpty()
+        {
+            return new VValue(String.Empty);
+        }
+
         protected override bool DeepEquals(VToken token)
         {
             if (!(token is VValue otherVal))

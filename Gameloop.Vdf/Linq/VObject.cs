@@ -1,6 +1,7 @@
 ﻿using Gameloop.Vdf.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -53,11 +54,11 @@ namespace Gameloop.Vdf.Linq
             set => _children[index] = value;
         }
 
-        public VToken this[string key]
+        public VToken? this[string key]
         {
             get
             {
-                if (!TryGetValue(key, out VToken result))
+                if (!TryGetValue(key, out VToken? result))
                     return null;
 
                 return result;
@@ -67,9 +68,9 @@ namespace Gameloop.Vdf.Linq
             {
                 VProperty prop = Properties().FirstOrDefault(x => x.Key == key);
                 if (prop != null)
-                    prop.Value = value;
+                    prop.Value = value ?? VValue.CreateEmpty();
                 else
-                    Add(key, value);
+                    Add(key, value ?? VValue.CreateEmpty());
             }
         }
 
@@ -162,7 +163,7 @@ namespace Gameloop.Vdf.Linq
             _children.RemoveAt(index);
         }
 
-        public bool TryGetValue(string key, out VToken value)
+        public bool TryGetValue(string key, [MaybeNullWhen(false)] out VToken value)
         {
             value = Properties().FirstOrDefault(x => x.Key == key)?.Value;
             return (value != null);
@@ -184,6 +185,12 @@ namespace Gameloop.Vdf.Linq
         {
             foreach (VProperty property in Properties())
                 yield return new KeyValuePair<string, VToken>(property.Key, property.Value);
+        }
+
+        VToken IDictionary<string, VToken>.this[string key]
+        {
+            get => this[key] ?? throw new KeyNotFoundException();
+            set => this[key] = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         void ICollection<KeyValuePair<string, VToken>>.Add(KeyValuePair<string, VToken> item)
