@@ -26,7 +26,7 @@ namespace Gameloop.Vdf.Linq
 
         public int Count => _children.Count;
 
-        public override VToken this[object key]
+        public override VToken? this[object key]
         {
             get
             {
@@ -37,6 +37,7 @@ namespace Gameloop.Vdf.Linq
 
                 return this[propertyName];
             }
+
             set
             {
                 ValidationUtils.ArgumentNotNull(key, nameof(key));
@@ -256,7 +257,7 @@ namespace Gameloop.Vdf.Linq
 
         private class VObjectDynamicProxy : DynamicProxy<VObject>
         {
-            public override bool TryGetMember(VObject instance, GetMemberBinder binder, out object result)
+            public override bool TryGetMember(VObject instance, GetMemberBinder binder, out object? result)
             {
                 // result can be null
                 result = instance[binder.Name];
@@ -265,10 +266,8 @@ namespace Gameloop.Vdf.Linq
 
             public override bool TrySetMember(VObject instance, SetMemberBinder binder, object value)
             {
-                VToken v = value as VToken;
-
                 // this can throw an error if value isn't a valid for a JValue
-                if (v == null)
+                if (!(value is VToken v))
                     v = new VValue(value);
 
                 instance[binder.Name] = v;

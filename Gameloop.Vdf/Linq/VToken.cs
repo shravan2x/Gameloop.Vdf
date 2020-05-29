@@ -13,9 +13,9 @@ namespace Gameloop.Vdf.Linq
     public abstract class VToken : IVEnumerable<VToken>, IDynamicMetaObjectProvider
     {
         // TODO: Implement these.
-        public VToken Parent { get; internal set; }
-        public VToken Previous { get; internal set; }
-        public VToken Next { get; internal set; }
+        public VToken? Parent { get; internal set; }
+        public VToken? Previous { get; internal set; }
+        public VToken? Next { get; internal set; }
 
         public abstract void WriteTo(VdfWriter writer);
 
@@ -31,16 +31,16 @@ namespace Gameloop.Vdf.Linq
             return Children().GetEnumerator();
         }
 
-        IVEnumerable<VToken> IVEnumerable<VToken>.this[object key] => this[key];
+        IVEnumerable<VToken> IVEnumerable<VToken>.this[object key] => this[key]!;
 
-        public static bool DeepEquals(VToken t1, VToken t2)
+        public static bool DeepEquals(VToken? t1, VToken? t2)
         {
             return (t1 == t2 || (t1 != null && t2 != null && t1.DeepEquals(t2)));
         }
 
         public abstract VToken DeepClone();
 
-        public virtual VToken this[object key]
+        public virtual VToken? this[object key]
         {
             get => throw new InvalidOperationException($"Cannot access child value on {GetType()}.");
             set => throw new InvalidOperationException($"Cannot set child value on {GetType()}.");
@@ -48,8 +48,8 @@ namespace Gameloop.Vdf.Linq
 
         public virtual T Value<T>(object key)
         {
-            VToken token = this[key];
-            return (token == null ? default(T) : Extensions.Convert<VToken, T>(token));
+            VToken? token = this[key];
+            return (token == null ? default : Extensions.Convert<VToken, T>(token));
         }
 
         public virtual IEnumerable<VToken> Children()
