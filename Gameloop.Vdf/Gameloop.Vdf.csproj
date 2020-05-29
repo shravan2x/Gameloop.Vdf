@@ -8,21 +8,28 @@
     <Copyright>Copyright © Shravan Rajinikanth 2016</Copyright>
     <Company>Gameloop</Company>
     <Authors>Shravan Rajinikanth</Authors>
-    <Version>0.5.0</Version>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+    <Version>0.6.0</Version>
+    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <FileVersion>0.6.0.0</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Vdf.NET</Title>
     <PackageId>Gameloop.Vdf</PackageId>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/shravan2x/Gameloop.Vdf/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>vdf keyvalue steam</PackageTags>
+    <PackageTags>vdf keyvalues steam</PackageTags>
     <RepositoryUrl>https://github.com/shravan2x/Gameloop.Vdf</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageProjectUrl>https://github.com/shravan2x/Gameloop.Vdf</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>- Added VToken.Value, VToken.Value&lt;T&gt;(), and other accessors.
-- Added IDictionary&lt;string, VToken&gt; as a superclass of VObject.
-- Moved VToken and subtypes to Gameloop.Vdf.Linq namespace.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added comment serialization and deserialization support. Learn more at https://github.com/shravan2x/Gameloop.Vdf/issues/18.
+- Added DeepClone method to VToken.
+- Added VToken.DeepEquals to deep compare two VTokens.
+- Added support for C# 8's nullable reference types.
+
+BREAKING CHANGES
+- VObject.Children() now returns an IEnumerable&lt;VToken&gt;, rather than an IEnumerable&lt;VProperty&gt;.
+- VProperty's empty constructor has been removed.
+- VObject's IDictionary&lt;string, VToken&gt;.this[string key] indexer now throws a KeyNotFoundException when the key isn't found.</PackageReleaseNotes>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -45,6 +52,13 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="changes.txt">
+      <Pack>True</Pack>
+      <PackagePath>readme.txt</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>
