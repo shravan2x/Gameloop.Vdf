@@ -61,7 +61,7 @@ namespace Gameloop.Vdf
                         continue;
                     }
                 }
-                else if (_tokenSize == 0 && curChar == VdfStructure.Comment && _charBuffer[_charPos + 1] == VdfStructure.Comment)
+                else if (!_isQuoted && _tokenSize == 0 && curChar == VdfStructure.Comment && _charBuffer[_charPos + 1] == VdfStructure.Comment)
                 {
                     _isComment = true;
                     _charPos += 2;
