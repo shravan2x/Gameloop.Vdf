@@ -4,8 +4,6 @@ namespace Gameloop.Vdf
 {
     public abstract class VdfReader : IDisposable
     {
-        protected const int MaximumTokenSize = 4096;
-
         public VdfSerializerSettings Settings { get; }
         public bool CloseInput { get; set; }
         public string Value { get; set; }

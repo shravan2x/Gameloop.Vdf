@@ -21,7 +21,7 @@ namespace Gameloop.Vdf
 
             _reader = reader;
             _charBuffer = new char[DefaultBufferSize];
-            _tokenBuffer = new char[MaximumTokenSize];
+            _tokenBuffer = new char[settings.MaximumTokenSize];
             _charPos = _charsLen = 0;
             _tokenSize = 0;
             _isQuoted = false;

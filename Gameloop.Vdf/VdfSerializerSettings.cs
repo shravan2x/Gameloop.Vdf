@@ -19,6 +19,11 @@
         /// </summary>
         public bool UsesConditionals = true;
 
+        /// <summary>
+        /// Sets the size of the token buffer used for deserialization.
+        /// </summary>
+        public int MaximumTokenSize = 4096;
+
         // System information
         public bool IsXBox360 = false, IsWin32 = true;
         public bool IsWindows = true, IsOSX = false, IsLinux = false, IsPosix = false;
