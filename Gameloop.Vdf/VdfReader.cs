@@ -6,9 +6,9 @@ namespace Gameloop.Vdf
     {
         public VdfSerializerSettings Settings { get; }
         public bool CloseInput { get; set; }
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
-        protected internal State CurrentState { get; protected set; }
+        public State CurrentState { get; protected set; }
 
         protected VdfReader() : this(VdfSerializerSettings.Default) { }
 
@@ -37,7 +37,7 @@ namespace Gameloop.Vdf
             Value = null;
         }
 
-        protected internal enum State
+        public enum State
         {
             Start,
             Property,
