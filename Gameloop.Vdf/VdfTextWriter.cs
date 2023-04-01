@@ -1,5 +1,6 @@
 ﻿using Gameloop.Vdf.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Gameloop.Vdf
@@ -63,6 +64,39 @@ namespace Gameloop.Vdf
             _writer.Write(text);
         }
 
+        public override void WriteConditional(IReadOnlyList<VConditional.Token> tokens)
+        {
+            AutoComplete(State.Conditional);
+            _writer.Write(VdfStructure.ConditionalStart);
+
+            foreach (VConditional.Token token in tokens)
+            {
+                switch (token.TokenType)
+                {
+                    case VConditional.TokenType.Constant:
+                        _writer.Write(VdfStructure.ConditionalConstant);
+                        _writer.Write(token.Name);
+                        break;
+
+                    case VConditional.TokenType.Not:
+                        _writer.Write(VdfStructure.ConditionalNot);
+                        break;
+
+                    case VConditional.TokenType.Or:
+                        _writer.Write(VdfStructure.ConditionalOr);
+                        _writer.Write(VdfStructure.ConditionalOr);
+                        break;
+
+                    case VConditional.TokenType.And:
+                        _writer.Write(VdfStructure.ConditionalAnd);
+                        _writer.Write(VdfStructure.ConditionalAnd);
+                        break;
+                }
+            }
+
+            _writer.Write(VdfStructure.ConditionalEnd);
+        }
+
         private void AutoComplete(State next)
         {
             if (CurrentState == State.Start)
@@ -74,6 +108,7 @@ namespace Gameloop.Vdf
             switch (next)
             {
                 case State.Value:
+                case State.Conditional:
                     _writer.Write(VdfStructure.Assign);
                     break;
 

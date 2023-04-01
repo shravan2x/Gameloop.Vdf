@@ -10,11 +10,13 @@ namespace Gameloop.Vdf
         private readonly TextReader _reader;
         private readonly char[] _charBuffer, _tokenBuffer;
         private int _charPos, _charsLen, _tokenSize;
-        private bool _isQuoted, _isComment;
+        private bool _isQuoted, _isComment, _isConditional;
 
-        public VdfTextReader(TextReader reader) : this(reader, VdfSerializerSettings.Default) { }
+        public VdfTextReader(TextReader reader)
+            : this(reader, VdfSerializerSettings.Default) { }
 
-        public VdfTextReader(TextReader reader, VdfSerializerSettings settings) : base(settings)
+        public VdfTextReader(TextReader reader, VdfSerializerSettings settings)
+            : base(settings)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
@@ -26,6 +28,7 @@ namespace Gameloop.Vdf
             _tokenSize = 0;
             _isQuoted = false;
             _isComment = false;
+            _isConditional = false;
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace Gameloop.Vdf
 
                 if (_isComment)
                 {
-                    if (curChar == '\r' || curChar == '\n')
+                    if (curChar == VdfStructure.CarriageReturn || curChar == VdfStructure.NewLine)
                     {
                         _isComment = false;
                         Value = new string(_tokenBuffer, 0, _tokenSize);
@@ -120,6 +123,35 @@ namespace Gameloop.Vdf
 
                 #endregion
 
+                #region Conditional start/end
+
+                if (_isConditional || (!_isQuoted && curChar == VdfStructure.ConditionalStart))
+                {
+                    if (_tokenSize > 0 && (curChar == VdfStructure.ConditionalOr || curChar == VdfStructure.ConditionalAnd || curChar == VdfStructure.ConditionalEnd))
+                    {
+                        Value = new string(_tokenBuffer, 0, _tokenSize);
+                        CurrentState = State.Conditional;
+                        return true;
+                    }
+                    else if (curChar == VdfStructure.ConditionalOr || curChar == VdfStructure.ConditionalAnd)
+                    {
+                        Value = new string(_charBuffer, _charPos, 2);
+                        CurrentState = State.Conditional;
+                        _charPos += 2;
+                        return true;
+                    }
+                    else if (curChar == VdfStructure.ConditionalStart || curChar == VdfStructure.ConditionalEnd || curChar == VdfStructure.ConditionalNot)
+                    {
+                        Value = curChar.ToString();
+                        CurrentState = State.Conditional;
+                        _isConditional = (curChar != VdfStructure.ConditionalEnd);
+                        _charPos++;
+                        return true;
+                    }
+                }
+
+                #endregion
+
                 #region Long token
 
                 _tokenBuffer[_tokenSize++] = curChar;
@@ -166,7 +198,7 @@ namespace Gameloop.Vdf
             while (EnsureBuffer())
                 if (_charBuffer[++_charPos] == '\n')
                     return true;
-            
+
             return false;
         }
 

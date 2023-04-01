@@ -6,6 +6,7 @@
         Property,
         Object,
         Value,
-        Comment
+        Comment,
+        Conditional
     }
 }

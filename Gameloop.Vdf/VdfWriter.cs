@@ -1,5 +1,6 @@
 ﻿using Gameloop.Vdf.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Gameloop.Vdf
 {
@@ -29,6 +30,8 @@ namespace Gameloop.Vdf
 
         public abstract void WriteComment(string text);
 
+        public abstract void WriteConditional(IReadOnlyList<VConditional.Token> tokens);
+
         void IDisposable.Dispose()
         {
             if (CurrentState == State.Closed)
@@ -50,6 +53,7 @@ namespace Gameloop.Vdf
             ObjectStart,
             ObjectEnd,
             Comment,
+            Conditional,
             Finished,
             Closed
         }

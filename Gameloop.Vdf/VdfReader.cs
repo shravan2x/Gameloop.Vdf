@@ -10,7 +10,8 @@ namespace Gameloop.Vdf
 
         protected internal State CurrentState { get; protected set; }
 
-        protected VdfReader() : this(VdfSerializerSettings.Default) { }
+        protected VdfReader()
+            : this(VdfSerializerSettings.Default) { }
 
         protected VdfReader(VdfSerializerSettings settings)
         {

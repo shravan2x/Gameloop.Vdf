@@ -3,13 +3,10 @@
     public static class VdfStructure
     {
         // Format
+        public const char CarriageReturn = '\r', NewLine = '\n';
         public const char Quote = '"', Escape = '\\', Comment = '/', Assign = ' ', Indent = '\t';
-        public const char ConditionalStart = '[', ConditionalEnd = ']';
+        public const char ConditionalStart = '[', ConditionalEnd = ']', ConditionalConstant = '$', ConditionalNot = '!', ConditionalAnd = '&', ConditionalOr = '|';
         public const char ObjectStart = '{', ObjectEnd = '}';
-
-        // Conditionals
-        public const string ConditionalXbox360 = "$X360", ConditionalWin32 = "$WIN32";
-        public const string ConditionalWindows = "$WINDOWS", ConditionalOSX = "$OSX", ConditionalLinux = "$LINUX", ConditionalPosix = "$POSIX";
 
         // Escapes
         private const uint EscapeMapLength = 128;
